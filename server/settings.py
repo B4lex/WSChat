@@ -137,3 +137,5 @@ AUTHENTICATION_BACKENDS = [
     'authorization.backends.UsernameAuthBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
+
+STATIC_ROOT = 'static'
