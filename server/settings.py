@@ -39,12 +39,16 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
+THIRD_PARTY_APPS = [
+    'channels',
+]
+
 LOCAL_APPS = [
     'chat',
     'authorization'
 ]
 
-INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,3 +143,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 STATIC_ROOT = 'static'
+STATIC_URL = '/static/'
+
+ASGI_APPLICATION = 'server.asgi.application'
