@@ -146,3 +146,12 @@ STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
 
 ASGI_APPLICATION = 'server.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': (('localhost', 6379),)
+        }
+    }
+}
