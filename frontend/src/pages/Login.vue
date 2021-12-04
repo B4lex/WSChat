@@ -1,14 +1,63 @@
 <template>
     <div>
         <Header/>
+        <v-form v-model="formValid">
+            <v-container>
+                <v-row
+                    align="center"
+                    justify="space-around"
+                >
+                    <v-col
+                        cols="12"
+                        md="4"
+                    >
+                    <v-text-field
+                        v-model="username"
+                        :rules="usernameRules"
+                        :counter="64"
+                        label="Username"
+                        required
+                    ></v-text-field>
+                    </v-col>
+                </v-row>
+                <v-row
+                    align="center"
+                    justify="space-around"
+                >
+                    <v-btn
+                        tile
+                        color="success"
+                        @click.prevent="formValid && performLogin()"
+                    >
+                        Sign In
+                    </v-btn>
+                </v-row>
+            </v-container>
+        </v-form>
     </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
 
+import { axios } from '@/services'
+
 export default {
     name: 'Login',
-    components: { Header }
+    components: { Header },
+    data: () => ({
+        formValid: false,
+        username: '',
+        usernameRules: [
+            v => !!v || 'Username is required',
+            v => v.length <= 64 || 'Username must be less than 64 characters'
+        ]
+    }),
+    methods: {
+        async performLogin () {
+            const response = await axios.post('/auth/token/', { username: this.username })
+            localStorage.setItem('access_token', response.data.token)
+        }
+    }
 }
 </script>

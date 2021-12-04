@@ -11,11 +11,13 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuetify": "^2.6.1"
   },
   "devDependencies": {
+    "@mdi/font": "^6.5.95",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
