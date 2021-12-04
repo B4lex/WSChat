@@ -41,6 +41,8 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'channels',
+    'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 LOCAL_APPS = [
@@ -154,4 +156,11 @@ CHANNEL_LAYERS = {
             'hosts': (('localhost', 6379),)
         }
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer',
+    ]
 }

@@ -2,8 +2,8 @@ from django.urls import path
 
 from authorization import views
 
-app_name = 'auth'
+app_name = 'authorization'
 
 urlpatterns = [
-    path('login/', views.LoginPageView.as_view(), name='login')
+    path('token/', views.UsernameObtainAuthToken.as_view(), name='token')
 ]
