@@ -7,15 +7,21 @@
       v-show="isLoading"
     ></v-progress-circular>
     <div v-show="!isLoading">
-      <div>
-        Welcome, {{ userInfo.username }}, to chat room!
-      </div>
+      <div>Welcome, {{ userInfo.username }}, to the chat room!</div>
       <div class="chat-wrapper">
-        <message
-          :message="message"
-          v-for="message in messages"
-          :key="message.id"
-        />
+        <div>
+          <message
+            :message="message"
+            v-for="message in messages.slice(Math.max(messages.length - 15, 0))"
+            :key="message.id"
+          />
+        </div>
+        <div class="bottom-bar">
+          <v-text-field
+            label="Write your message"
+            @keypress.enter="sendMessage"
+          ></v-text-field>
+        </div>
       </div>
     </div>
   </div>
@@ -23,9 +29,9 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Message from '../components/Message.vue'
+import Message from '@/components/Message.vue'
 
-import { auth, api } from '@/services'
+import { auth, api, ChatWebSocketMixin } from '@/services'
 
 export default {
   name: 'ChatRoom',
@@ -33,18 +39,31 @@ export default {
     Header,
     Message
   },
+  mixins: [ChatWebSocketMixin],
   data: () => ({
     userInfo: {},
     messages: [],
     isLoading: true
   }),
   methods: {
+    handleNewMessage(message) {
+      this.messages.push(message)
+    },
+    sendMessage(e) {
+      console.log(e)
+      this.sendMessageByWebSocket({
+        content: e.target.value,
+        sender_id: this.userInfo.id
+      })
+      e.target.value = ''
+    },
     async fetchMessages() {
       const response = await api.get('chat/messages/')
       return response.data
     }
   },
-  async mounted() {
+  async created() {
+    this.initWS()
     this.userInfo = await auth.getUserInfo()
     this.messages = await this.fetchMessages()
     setTimeout(() => {
@@ -56,10 +75,14 @@ export default {
 
 <style scoped>
 .chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 500px;
   height: 500px;
   border: 1px solid black;
   border-radius: 5px;
   margin: 2rem auto;
+  padding: 2rem;
 }
 </style>
