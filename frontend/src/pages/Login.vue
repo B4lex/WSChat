@@ -31,7 +31,7 @@
 <script>
 import Header from '@/components/Header'
 
-import { axios } from '@/services'
+import { api } from '@/services'
 
 export default {
   name: 'Login',
@@ -46,10 +46,11 @@ export default {
   }),
   methods: {
     async performLogin() {
-      const response = await axios.post('/auth/token/', {
+      const response = await api.post('/auth/token/', {
         username: this.username
       })
       localStorage.setItem('auth_token', response.data.token)
+      this.$router.push({name: 'chat-room'})
     }
   }
 }
