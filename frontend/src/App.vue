@@ -1,9 +1,9 @@
 <template>
-  <v-main>
-    <v-app>
+  <v-app>
+    <v-main>
       <router-view />
-    </v-app>
-  </v-main>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -19,6 +19,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding-top: 60px;
 }
 </style>

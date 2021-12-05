@@ -17,6 +17,7 @@
         <v-row align="center" justify="space-around">
           <v-btn
             tile
+            :disabled="!formValid"
             color="success"
             @click.prevent="formValid && performLogin()"
           >
@@ -50,6 +51,7 @@ export default {
         username: this.username
       })
       localStorage.setItem('auth_token', response.data.token)
+      localStorage.setItem('user_id', response.data.user_id)
       this.$router.push({name: 'chat-room'})
     }
   }
