@@ -5,12 +5,12 @@ import Login from '@/pages/Login'
 Vue.use(Router)
 
 export default new Router({
-    routes: [
-        {
-            path: '/',
-            name: 'LoginPage',
-            component: Login
-        }
-    ],
-    mode: 'history'
+  routes: [
+    {
+      path: '/',
+      name: 'LoginPage',
+      component: Login
+    }
+  ],
+  mode: 'history'
 })

@@ -2,8 +2,8 @@ import axios from 'axios'
 import { API_ROOT } from '@/config'
 
 export default axios.create({
-    baseURL: API_ROOT,
-    headers: {
-        'Content-Type': 'application/json'
-    }
+  baseURL: API_ROOT,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 })

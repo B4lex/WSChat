@@ -49,7 +49,7 @@ export default {
       const response = await axios.post('/auth/token/', {
         username: this.username
       })
-      localStorage.setItem('access_token', response.data.token)
+      localStorage.setItem('auth_token', response.data.token)
     }
   }
 }
