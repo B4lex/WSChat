@@ -5,7 +5,7 @@ from django.contrib.auth.models import AnonymousUser
 
 class TokenAuthMiddleware:
     """
-    Token authorization middleware for Django Channels 2
+    Token authorization middleware for Django Channels
     """
 
     def __init__(self, inner):

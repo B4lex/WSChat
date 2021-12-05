@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 
+from authorization.models import ChatUser
+
 
 class UsernameAuthTokenSerializer(AuthTokenSerializer):
     password = None
@@ -22,3 +24,10 @@ class UsernameAuthTokenSerializer(AuthTokenSerializer):
 
         attrs['user'] = user
         return attrs
+
+
+class ChatUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ChatUser
+        fields = ('username',)
