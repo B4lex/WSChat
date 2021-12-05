@@ -1,12 +1,17 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from chat import views
 from chat import consumers
 
 app_name = 'chat'
 
+router = DefaultRouter()
+router.register('messages', views.MessageViewSet)
+
+
 urlpatterns = [
-    path('welcome/', views.ChatWelcomeView.as_view(), name='welcome')
+    *router.urls
 ]
 
 

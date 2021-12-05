@@ -1,8 +1,13 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
-from django.urls import reverse_lazy
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
+
+from chat.models import Message
+from chat.serializers import MessageSerializer
 
 
-class ChatWelcomeView(LoginRequiredMixin, TemplateView):
-    template_name = 'chat/welcome.html'
-    login_url = reverse_lazy('auth:login')
+class MessageViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet
+):
+    serializer_class = MessageSerializer
+    queryset = Message.objects.all()

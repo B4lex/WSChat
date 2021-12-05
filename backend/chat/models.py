@@ -7,6 +7,9 @@ from authorization.models import ChatUser
 class Room(models.Model):
     name = models.CharField(max_length=256)
 
+    def __str__(self):
+        return self.name
+
 
 class Message(models.Model):
     content = models.TextField()
