@@ -1,4 +1,4 @@
-const WEBSOCKET_ROOT = process.env.WEBSOCKET_ROOT || null
+import { WEBSOCKET_ROOT } from '@/config'
 
 // Chat WebSocket mixin
 export default {
