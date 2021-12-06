@@ -50,7 +50,6 @@ export default {
       this.messages.push(message)
     },
     sendMessage(e) {
-      console.log(e)
       this.sendMessageByWebSocket({
         content: e.target.value,
         sender_id: this.userInfo.id

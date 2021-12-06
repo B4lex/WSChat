@@ -1,51 +1,48 @@
 import json
-from functools import cached_property
 
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from asgiref.sync import sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
 
-from chat.models import Room, Message
+from chat.models import Room
 from chat.serializers import MessageSerializer
 
 
-class ChatConsumer(WebsocketConsumer):
-    def connect(self):
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
         self.room_group_name = 'my_room'
 
-        async_to_sync(self.channel_layer.group_add)(
+        await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
 
-        self.accept()
+        await self.accept()
 
-    def disconnect(self, close_code):
-        async_to_sync(self.channel_layer.group_discard)(
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
 
-    def receive(self, text_data=None, bytes_data=None):
+    async def receive(self, text_data=None, bytes_data=None):
+        room = await sync_to_async(Room.objects.first)()
         message = {
             **json.loads(text_data),
-            'room': self.room.id
+            'room': room.id
         }
         serializer = MessageSerializer(data=message)
-        serializer.is_valid()
-        serializer.save()
-        async_to_sync(self.channel_layer.group_send)(
+        await sync_to_async(serializer.is_valid)()
+        await sync_to_async(serializer.save)()
+        await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'serialized_data': serializer.data
+                'serialized_data': await sync_to_async(getattr)(serializer, 'data')
             }
         )
 
-    def chat_message(self, event):
-        self.send(text_data=json.dumps(
+    async def chat_message(self, event):
+        await self.send(text_data=json.dumps(
             event['serialized_data']
         ))
 
-    @cached_property
-    def room(self):
-        return Room.objects.first()
