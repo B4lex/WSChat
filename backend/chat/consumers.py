@@ -32,7 +32,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             **json.loads(text_data),
             'room': room.id
         }
-        serializer = MessageSerializer(data=message)
+        serializer = MessageSerializer(data=message, context=self.scope)
         await sync_to_async(serializer.is_valid)()
         await sync_to_async(serializer.save)()
         await self.channel_layer.group_send(
