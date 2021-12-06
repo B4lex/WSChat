@@ -9,14 +9,16 @@ from chat.serializers import MessageSerializer
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_group_name = 'my_room'
+        self.room_group_name = 'global'
+        if self.scope['user'].is_authenticated:
+            await self.accept()
+        else:
+            await self.close()
 
         await self.channel_layer.group_add(
             self.room_group_name,
             self.channel_name
         )
-
-        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(
@@ -45,4 +47,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(
             event['serialized_data']
         ))
-

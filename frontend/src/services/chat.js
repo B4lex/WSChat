@@ -1,4 +1,5 @@
 import { WEBSOCKET_ROOT } from '@/config'
+import { auth } from '@/services'
 
 // Chat WebSocket mixin
 export default {
@@ -7,7 +8,9 @@ export default {
   }),
   methods: {
     initWS() {
-      this.wsInstance = new WebSocket(`${WEBSOCKET_ROOT}ws/chat/`)
+      this.wsInstance = new WebSocket(
+        `${WEBSOCKET_ROOT}ws/chat/?token=${auth.getToken()}`
+      )
       this.wsInstance.onmessage = e => {
         const message = JSON.parse(e.data)
         if (this.handleNewMessage) {

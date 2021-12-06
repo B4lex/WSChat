@@ -19,8 +19,7 @@ export default {
     return response.data
   },
 
-  getAuthHeaders() {
-    const token = localStorage.getItem('auth_token')
-    return { Authorization: `Bearer ${token}` }
+  getToken() {
+    return localStorage.getItem('auth_token')
   }
 }
