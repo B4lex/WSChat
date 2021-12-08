@@ -18,6 +18,7 @@
         </div>
         <div class="bottom-bar">
           <v-text-field
+            v-model="message"
             label="Write your message"
             @keypress.enter="sendMessage"
           ></v-text-field>
@@ -41,6 +42,7 @@ export default {
   },
   mixins: [ChatWebSocketMixin],
   data: () => ({
+    message: '',
     userInfo: {},
     messages: [],
     isLoading: true
@@ -51,10 +53,10 @@ export default {
     },
     sendMessage(e) {
       this.sendMessageByWebSocket({
-        content: e.target.value,
+        content: this.message,
         sender_id: this.userInfo.id
       })
-      e.target.value = ''
+      this.message = ''
     },
     async fetchMessages() {
       const response = await api.get('chat/messages/')
