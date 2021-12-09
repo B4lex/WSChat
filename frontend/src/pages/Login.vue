@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header />
-    <v-form v-model="formValid">
+    <v-form v-model="formValid" @submit.prevent="formValid && performLogin()">
       <v-container>
         <v-row align="center" justify="space-around">
           <v-col cols="12" md="4">
@@ -19,7 +19,7 @@
             tile
             :disabled="!formValid"
             color="success"
-            @click.prevent="formValid && performLogin()"
+            type="submit"
           >
             Sign In
           </v-btn>
