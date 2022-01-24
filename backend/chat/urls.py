@@ -14,7 +14,6 @@ urlpatterns = [
     *router.urls
 ]
 
-
 ws_urlpatterns = [
     path('ws/chat/', consumers.ChatConsumer.as_asgi())
 ]
