@@ -18,8 +18,11 @@
         </div>
         <div class="bottom-bar">
           <v-text-field
+            outlined
             v-model="message"
             label="Write your message"
+            color="white"
+            dark
             @keypress.enter="sendMessage"
           ></v-text-field>
         </div>
@@ -67,9 +70,7 @@ export default {
     this.initWS()
     this.userInfo = await auth.getUserInfo()
     this.messages = await this.fetchMessages()
-    setTimeout(() => {
-      this.isLoading = false
-    }, 500)
+    this.isLoading = false
   }
 }
 </script>
@@ -81,9 +82,10 @@ export default {
   justify-content: space-between;
   width: 500px;
   height: 500px;
-  border: 1px solid black;
-  border-radius: 5px;
+  color: white;
+  border-radius: 10px;
   margin: 2rem auto;
   padding: 2rem;
+  background-color:rgba(0, 20, 0, 0.8);
 }
 </style>

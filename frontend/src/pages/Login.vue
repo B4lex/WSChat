@@ -1,10 +1,18 @@
 <template>
-  <div>
+  <v-container fluid class="login">
     <Header />
-    <v-form v-model="formValid" @submit.prevent="formValid && performLogin()">
-      <v-container>
-        <v-row align="center" justify="space-around">
-          <v-col cols="12" md="4">
+    <v-card
+      class="mx-auto pa-5"
+      width="500"
+      height="150"
+      outlined
+    >
+      <v-row
+        justify="center"
+        align-content="center"
+      >
+        <v-col>
+          <v-form v-model="formValid" @submit.prevent="formValid && performLogin()">
             <v-text-field
               v-model="username"
               :rules="usernameRules"
@@ -12,21 +20,19 @@
               label="Username"
               required
             ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row align="center" justify="space-around">
-          <v-btn
-            tile
-            :disabled="!formValid"
-            color="success"
-            type="submit"
-          >
-            Sign In
-          </v-btn>
-        </v-row>
-      </v-container>
-    </v-form>
-  </div>
+            <v-btn
+              tile
+              :disabled="!formValid"
+              color="success"
+              type="submit"
+            >
+              Sign In
+            </v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -57,3 +63,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.login {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+</style>

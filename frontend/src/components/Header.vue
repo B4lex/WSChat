@@ -1,7 +1,11 @@
 <template>
-  <header>
-    <h1>WSChat</h1>
-  </header>
+  <div class="container">
+    <header>
+      <a :href="$router.resolve({name: 'login'}).href">
+        WSChat
+      </a>
+    </header>
+  </div>
 </template>
 
 <script>
@@ -10,10 +14,14 @@ export default {
 }
 </script>
 
-<style>
-header > h1 {
-  display: block;
-  width: 10rem;
-  margin: 0 auto;
+<style scoped>
+header > a {
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  font-weight: 400;
+  font-size: 400%;
+  border-bottom: solid 1px;
 }
+
 </style>
