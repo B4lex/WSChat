@@ -4,7 +4,7 @@
     <v-card
       class="mx-auto pa-5"
       width="500"
-      height="150"
+      min-height="150"
       outlined
     >
       <v-row

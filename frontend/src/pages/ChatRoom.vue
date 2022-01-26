@@ -8,84 +8,34 @@
     ></v-progress-circular>
     <div v-show="!isLoading">
       <div>Welcome, {{ userInfo.username }}, to the chat room!</div>
-      <div class="chat-wrapper">
-        <div>
-          <message
-            :message="message"
-            v-for="message in messages.slice(Math.max(messages.length - 15, 0))"
-            :key="message.id"
-          />
-        </div>
-        <div class="bottom-bar">
-          <v-text-field
-            outlined
-            v-model="message"
-            label="Write your message"
-            color="white"
-            dark
-            @keypress.enter="sendMessage"
-          ></v-text-field>
-        </div>
-      </div>
+      <chat-box @initialized="isLoading = false" />
     </div>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header.vue'
-import Message from '@/components/Message.vue'
+import ChatBox from '@/components/ChatBox.vue'
 
-import { auth, api, ChatWebSocketMixin } from '@/services'
+import { auth } from '@/services'
 
 export default {
   name: 'ChatRoom',
   components: {
     Header,
-    Message
+    ChatBox
   },
-  mixins: [ChatWebSocketMixin],
   data: () => ({
-    message: '',
-    userInfo: {},
-    messages: [],
-    isLoading: true
+    isLoading: true,
+    userInfo: {}
   }),
-  methods: {
-    handleNewMessage(message) {
-      this.messages.push(message)
-    },
-    sendMessage(e) {
-      this.sendMessageByWebSocket({
-        content: this.message,
-        sender_id: this.userInfo.id
-      })
-      this.message = ''
-    },
-    async fetchMessages() {
-      const response = await api.get('chat/messages/')
-      return response.data
-    }
-  },
   async created() {
-    this.initWS()
     this.userInfo = await auth.getUserInfo()
-    this.messages = await this.fetchMessages()
     this.isLoading = false
   }
 }
 </script>
 
 <style scoped>
-.chat-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 500px;
-  height: 500px;
-  color: white;
-  border-radius: 10px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color:rgba(0, 20, 0, 0.8);
-}
+
 </style>
