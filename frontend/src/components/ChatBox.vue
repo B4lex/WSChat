@@ -7,13 +7,17 @@
         :key="message.id"
       />
     </div>
+    <div class="typers">
+      <span v-show="formatedTypers">{{ formatedTypers }} Набирает сообщение...</span>
+    </div>
     <div class="bottom-bar">
       <v-text-field
         outlined
         v-model="message"
         label="Write your message"
-        color="white"
+        color="#45ff86"
         dark
+        @input="sendTyping(userID)"
         @keypress.enter="sendMessage"
       ></v-text-field>
     </div>
@@ -35,16 +39,27 @@ export default {
   mixins: [ChatWebSocketMixin],
   data: () => ({
     message: '',
-    userInfo: {},
-    messages: []
+    messages: [],
+    typers: []
   }),
   methods: {
     handleNewMessage(message) {
       this.messages.push(message)
       this.$nextTick(this.scrollToLatest)
     },
+    handleTyping(userData) {
+      this.typers.push(userData)
+      setTimeout(() => {
+        this.typers.splice(
+          this.typers.indexOf(
+            this.typers.find(typer => typer.id === userData.id)
+          ),
+          1
+        )
+      }, 5000)
+    },
     sendMessage(e) {
-      this.sendMessageByWebSocket({
+      this.sendChatMessage({
         content: this.message,
         sender_id: this.userInfo.id
       })
@@ -56,6 +71,17 @@ export default {
     },
     scrollToLatest() {
       this.$refs.chatBody.scrollTop = this.$refs.chatBody.scrollHeight
+    }
+  },
+  computed: {
+    userID() {
+      return +localStorage.getItem('user_id')
+    },
+    formatedTypers() {
+      console.log(this.typers.filter(typer => typer.id !== this.userID))
+      return [...new Set(
+        this.typers.filter(typer => typer.id !== this.userID).map(typer => typer.username)
+      )].join(', ')
     }
   },
   async created() {
@@ -83,8 +109,10 @@ export default {
 }
 
 .chat-body {
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll;
-  margin-bottom:0.8rem;
+  overflow-x: hidden;
   border-radius: 10px;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -92,5 +120,10 @@ export default {
 
 .chat-body::-webkit-scrollbar {
   display: none;
+}
+
+.typers {
+  min-height: 1rem;
+  margin-bottom: 0.8rem;
 }
 </style>
