@@ -103,11 +103,12 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 600px;
+  height: 670px;
   color: white;
   border-radius: 10px;
   padding: 1rem;
   background-color:rgba(0, 20, 0, 0.8);
+  margin: 0 1rem;
 }
 
 .chat-body {

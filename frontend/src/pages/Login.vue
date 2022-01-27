@@ -20,14 +20,13 @@
               label="Username"
               required
             ></v-text-field>
-            <v-btn
-              tile
-              :disabled="!formValid"
-              color="success"
-              type="submit"
-            >
-              Sign In
-            </v-btn>
+            <v-progress-circular
+              :size="50"
+              color="primary"
+              indeterminate
+              v-show="submitted"
+            ></v-progress-circular>
+            <sign-in-button :disabled="!formValid" v-show="!submitted" />
           </v-form>
         </v-col>
       </v-row>
@@ -37,13 +36,18 @@
 
 <script>
 import Header from '@/components/Header'
+import SignInButton from '@/components/buttons/SignIn'
 
 import { api } from '@/services'
 
 export default {
   name: 'Login',
-  components: { Header },
+  components: {
+    Header,
+    SignInButton
+  },
   data: () => ({
+    submitted: false,
     formValid: false,
     username: '',
     usernameRules: [
@@ -53,6 +57,7 @@ export default {
   }),
   methods: {
     async performLogin() {
+      this.submitted = true
       const response = await api.post('/auth/token/', {
         username: this.username
       })
