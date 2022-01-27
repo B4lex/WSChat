@@ -133,6 +133,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
+
+MEDIA_ROOT = 'media'
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -145,9 +149,6 @@ AUTHENTICATION_BACKENDS = [
     'authorization.backends.UsernameAuthBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
-
-STATIC_ROOT = 'static'
-STATIC_URL = '/static/'
 
 ASGI_APPLICATION = 'server.asgi.application'
 

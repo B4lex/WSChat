@@ -5,4 +5,4 @@ from . import models
 
 @admin.register(models.ChatUser)
 class ChatUserAdmin(admin.ModelAdmin):
-    pass
+    fields = ('username', 'avatar')
