@@ -7,10 +7,12 @@
         :key="message.id"
       />
     </div>
-    <div class="typers">
-      <span v-show="formatedTypers">{{ formatedTypers }} Набирает сообщение...</span>
-    </div>
     <div class="bottom-bar">
+      <div class="typers">
+        <span v-show="typers.length">
+          {{ formatedTypers }} {{ typers.length > 1 ? 'are' : 'is' }} typing...
+        </span>
+      </div>
       <v-text-field
         outlined
         v-model="message"
@@ -40,7 +42,7 @@ export default {
   data: () => ({
     message: '',
     messages: [],
-    typers: []
+    typingEvents: []
   }),
   methods: {
     handleNewMessage(message) {
@@ -48,11 +50,11 @@ export default {
       this.$nextTick(this.scrollToLatest)
     },
     handleTyping(userData) {
-      this.typers.push(userData)
+      this.typingEvents.push(userData)
       setTimeout(() => {
-        this.typers.splice(
-          this.typers.indexOf(
-            this.typers.find(typer => typer.id === userData.id)
+        this.typingEvents.splice(
+          this.typingEvents.indexOf(
+            this.typingEvents.find(typer => typer.id === userData.id)
           ),
           1
         )
@@ -77,11 +79,13 @@ export default {
     userID() {
       return +localStorage.getItem('user_id')
     },
-    formatedTypers() {
-      console.log(this.typers.filter(typer => typer.id !== this.userID))
+    typers() {
       return [...new Set(
-        this.typers.filter(typer => typer.id !== this.userID).map(typer => typer.username)
-      )].join(', ')
+        this.typingEvents.filter(typer => typer.id !== this.userID).map(typer => typer.username)
+      )]
+    },
+    formatedTypers() {
+      return this.typers.join(', ')
     }
   },
   async created() {
@@ -99,16 +103,15 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 700px;
-  height: 700px;
+  height: 600px;
   color: white;
   border-radius: 10px;
-  margin: 2rem auto;
-  padding: 2rem;
+  padding: 1rem;
   background-color:rgba(0, 20, 0, 0.8);
 }
 
 .chat-body {
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
@@ -123,7 +126,15 @@ export default {
 }
 
 .typers {
-  min-height: 1rem;
-  margin-bottom: 0.8rem;
+  min-height: 1.2rem;
+  line-height: 1.2rem;
+  margin-bottom: .2rem;
+  font-size: 90%;
+}
+
+.bottom-bar {
+  padding: .2rem 1rem;
+  background-color: rgba(0, 50, 50, 0.4);
+  border-radius: 10px;
 }
 </style>

@@ -1,13 +1,14 @@
 <template>
-  <div>
+  <div class="chat-room-wrapper">
     <Header />
-    <v-progress-circular
-      indeterminate
-      color="green"
+    <div class="mb-5">Welcome, {{ userInfo.username }}, to the chat room!</div>
+    <v-skeleton-loader
+      type="article, article, article, article,actions"
       v-show="isLoading"
-    ></v-progress-circular>
+      class="skeleton"
+      max-width="800"
+    ></v-skeleton-loader>
     <div v-show="!isLoading">
-      <div>Welcome, {{ userInfo.username }}, to the chat room!</div>
       <chat-box @initialized="isLoading = false" />
     </div>
   </div>
@@ -31,11 +32,14 @@ export default {
   }),
   async created() {
     this.userInfo = await auth.getUserInfo()
-    this.isLoading = false
   }
 }
 </script>
 
 <style scoped>
-
+.chat-room-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
 </style>
