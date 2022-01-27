@@ -2,7 +2,9 @@ import json
 
 from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+
 from django.contrib.auth import get_user_model
+from django.test import RequestFactory
 
 from authorization.serializers import ChatUserSerializer
 from chat.models import Room
@@ -42,7 +44,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 **serialized_data['data'],
                 'room': room.id
             }
-            serializer = MessageSerializer(data=message, context=self.scope)
+            serializer = MessageSerializer(
+                data=message,
+                context={
+                    **self.scope,
+                    'request': RequestFactory(
+                        SERVER_NAME=self.scope['headers'][0][1].decode('utf-8')
+                    ).get('')}  # workaround to generate absolute path
+            )
             await sync_to_async(serializer.is_valid)()
             await sync_to_async(serializer.save)()
             data = await sync_to_async(getattr)(serializer, 'data')

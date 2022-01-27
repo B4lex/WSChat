@@ -1,6 +1,6 @@
 <template>
   <div :class="['message-wrapper', message.sender.id == currentUserID ? 'own' : 'opponent']">
-      <img src="@/assets/logo.png" alt="Avatar" class="right">
+      <img :src="message.sender.avatar" alt="Avatar" class="right">
       <div class="message-box gradient">
         <div class="sender" v-show="message.sender.id != currentUserID">{{ message.sender.username }}:</div>
         <div class="content">{{ message.content }}</div>
@@ -58,6 +58,14 @@ export default {
 .opponent {
   text-align: left;
   align-self: flex-start;
+}
+
+.own img {
+  margin-left: 1rem;
+}
+
+.opponent img {
+  margin-right: 1rem;
 }
 
 .own > .gradient {

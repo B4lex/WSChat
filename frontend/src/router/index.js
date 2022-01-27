@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Login from '@/pages/Login'
 import ChatRoom from '@/pages/ChatRoom'
+import Profile from '@/pages/Profile'
 import { auth } from '@/services'
 
 Vue.use(Router)
@@ -18,6 +19,14 @@ const router = new Router({
       path: '/room',
       name: 'chat-room',
       component: ChatRoom,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
       meta: {
         requiresAuth: true
       }

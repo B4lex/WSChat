@@ -1,7 +1,10 @@
 <template>
   <div class="chat-room-wrapper">
     <Header />
-    <div class="mb-5">Welcome, {{ userInfo.username }}, to the chat room!</div>
+    <div class="mb-5">Welcome,
+      <router-link to="/profile">{{ userInfo.username }}</router-link>,
+      to the chat room!
+    </div>
     <v-skeleton-loader
       type="article, article, article, article,actions"
       v-show="isLoading"
