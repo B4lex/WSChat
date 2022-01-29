@@ -49,7 +49,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 context={
                     **self.scope,
                     'request': RequestFactory(
-                        SERVER_NAME=self.scope['headers'][0][1].decode('utf-8')
+                        SERVER_NAME=dict(self.scope['headers'])[b'host'].decode('utf-8')
                     ).get('')}  # workaround to generate absolute path
             )
             await sync_to_async(serializer.is_valid)()
