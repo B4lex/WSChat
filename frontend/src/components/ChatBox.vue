@@ -13,15 +13,20 @@
           {{ formatedTypers }} {{ typers.length > 1 ? 'are' : 'is' }} typing...
         </span>
       </div>
-      <v-text-field
-        outlined
-        v-model="message"
-        label="Write your message"
-        color="#45ff86"
-        dark
-        @input="sendTyping(userID)"
-        @keypress.enter="sendMessage"
-      ></v-text-field>
+      <div class="d-flex">
+        <v-text-field
+          outlined
+          v-model="message"
+          label="Write your message"
+          color="#45ff86"
+          dark
+          @input="sendTyping(userID)"
+          @keypress.enter="sendMessage"
+        ></v-text-field>
+        <v-btn class="sendbutton" color="primary" fab @click="sendMessage" :disabled="!message">
+          <v-icon size="70">mdi-send-circle</v-icon>
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -61,11 +66,13 @@ export default {
       }, 5000)
     },
     sendMessage(e) {
-      this.sendChatMessage({
-        content: this.message,
-        sender_id: this.userInfo.id
-      })
-      this.message = ''
+      if (this.message) {
+        this.sendChatMessage({
+          content: this.message,
+          sender_id: this.userInfo.id
+        })
+        this.message = ''
+      }
     },
     async fetchMessages() {
       const response = await api.get('chat/messages/')
@@ -80,9 +87,13 @@ export default {
       return +localStorage.getItem('user_id')
     },
     typers() {
-      return [...new Set(
-        this.typingEvents.filter(typer => typer.id !== this.userID).map(typer => typer.username)
-      )]
+      return [
+        ...new Set(
+          this.typingEvents
+            .filter(typer => typer.id !== this.userID)
+            .map(typer => typer.username)
+        )
+      ]
     },
     formatedTypers() {
       return this.typers.join(', ')
@@ -107,7 +118,7 @@ export default {
   color: white;
   border-radius: 10px;
   padding: 1rem;
-  background-color:rgba(0, 20, 0, 0.8);
+  background-color: rgba(0, 20, 0, 0.8);
   margin: 0 1rem;
 }
 
@@ -129,13 +140,17 @@ export default {
 .typers {
   min-height: 1.2rem;
   line-height: 1.2rem;
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
   font-size: 90%;
 }
 
 .bottom-bar {
-  padding: .2rem 1rem;
+  padding: 0.2rem 1rem;
   background-color: rgba(0, 50, 50, 0.4);
   border-radius: 10px;
+}
+
+.sendbutton{
+  margin-left: 1rem;
 }
 </style>

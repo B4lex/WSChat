@@ -4,30 +4,52 @@
     <v-container class="profile-wrapper">
       Your name is {{ userInfo.username }}!
       <div class="avatar">
-        <a class="upload-photo">
+        <input type="file" ref="file" @input="uploadFile" hidden />
+        <a class="upload-photo" @click.prevent="$refs.file.click()">
           <div>
             <v-icon color="white" class="d-block">mdi-upload</v-icon>
             Upload your photo
           </div>
         </a>
-        <img :src="userInfo.avatar">
+        <img :src="userInfo.avatar" />
       </div>
+      <v-progress-linear
+        color="teal"
+        buffer-value="0"
+        v-show="isAvatarUploading"
+        :value="uploadPercentage"
+        stream
+      />
     </v-container>
   </div>
 </template>
 
 <script>
-import { auth } from '@/services'
+import { auth, profile } from '@/services'
 import Header from '@/components/Header.vue'
 
 export default {
   components: { Header },
   name: 'Profile',
   data: () => ({
-    userInfo: {}
+    userInfo: {},
+    uploadPercentage: 0
   }),
+  methods: {
+    async uploadFile(e) {
+      const response = await profile.uploadAvatar(e.target.files[0], e => {
+        this.uploadPercentage = parseInt(Math.round((e.loaded / e.total) * 100))
+      })
+      this.userInfo.avatar = response.data.avatar
+    }
+  },
   async created() {
     this.userInfo = await auth.getUserInfo()
+  },
+  computed: {
+    isAvatarUploading() {
+      return this.uploadPercentage > 0 && this.uploadPercentage < 100
+    }
   }
 }
 </script>
@@ -64,14 +86,13 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: upload 1s;
   animation-fill-mode: forwards;
-  animation: appear 1s;
+  animation: appear 0.3s;
 }
 
 .avatar > .upload-photo {
   color: white;
-  z-index: 1000;
+  z-index: 100;
   display: none;
   position: absolute;
   text-align: center;

@@ -24,6 +24,7 @@ class UsernameObtainAuthToken(ObtainAuthToken):
 
 class ChatUserViewSet(
     mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
     GenericViewSet
 ):
     serializer_class = ChatUserSerializer
