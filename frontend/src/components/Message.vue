@@ -1,10 +1,22 @@
 <template>
   <div :class="['message-wrapper', message.sender.id == currentUserID ? 'own' : 'opponent']">
-      <img :src="message.sender.avatar" alt="Avatar" class="right">
-      <div class="message-box gradient">
-        <div class="sender" v-show="message.sender.id != currentUserID">{{ message.sender.username }}:</div>
-        <div class="content">{{ message.content }}</div>
+    <div class="avatar-wrapper">
+      <img
+        :src="message.sender.avatar"
+        alt="Avatar"
+        draggable="false"
+        v-if="!serial"
+      >
+    </div>
+    <div class="message-box gradient">
+      <div
+        class="sender"
+        v-show="!serial && message.sender.id != currentUserID"
+      >
+        {{ message.sender.username }}:
       </div>
+      <div class="content">{{ message.content }}</div>
+    </div>
   </div>
 </template>
 
@@ -13,7 +25,11 @@
 export default {
   name: 'Message',
   props: {
-    message: Object
+    message: Object,
+    serial: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     currentUserID() {
@@ -60,11 +76,11 @@ export default {
   align-self: flex-start;
 }
 
-.own img {
+.own .avatar-wrapper {
   margin-left: 1rem;
 }
 
-.opponent img {
+.opponent .avatar-wrapper {
   margin-right: 1rem;
 }
 
@@ -78,11 +94,15 @@ export default {
   background: linear-gradient(163deg, rgba(27,35,156,1) 0%, rgba(57,45,133,1) 22%, rgba(51,59,152,1) 38%, rgba(25,62,145,1) 51%, rgba(61,32,152,1) 76%, rgba(55,13,157,1) 100%);
 }
 
-.message-wrapper > img {
-  display: block;
+.avatar-wrapper {
   width: 50px;
   height: 50px;
+}
+
+.avatar-wrapper > img {
   border-radius: 50%;
+  width: 100%;
+  height: 100%;
 }
 
 .break-everything {

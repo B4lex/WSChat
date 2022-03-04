@@ -3,7 +3,8 @@
     <div class="chat-body" ref="chatBody">
       <message
         :message="message"
-        v-for="message in messages"
+        v-for="(message, index) in messages"
+        :serial="index !== 0 && messages[index - 1].sender.id === message.sender.id"
         :key="message.id"
       />
     </div>
