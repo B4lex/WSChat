@@ -1,0 +1,18 @@
+services:
+  web:
+    build: .
+    depends_on:
+      - redis
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+    ports:
+      - "8000:8000"
+    container_name: ws-backend
+    volumes:
+      - .:/app
+
+  redis:
+    image: 'redis:latest'
+    container_name: ws-redis
