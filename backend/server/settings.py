@@ -12,9 +12,18 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Environment variables
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    REDIS_HOST=(str, 'localhost')
+)
+environ.Env.read_env((BASE_DIR / '.env').as_posix())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -23,7 +32,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-(h-c)dk!w&f83-00zm__3gs(v$x(1gw0#4s3_x+ov@%w13li&q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -133,9 +142,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+STATIC_ROOT = BASE_DIR / 'static'
 
-MEDIA_ROOT = 'media'
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 # Default primary key field type
@@ -156,7 +165,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': (('localhost', 6379),)
+            'hosts': ((env('REDIS_HOST'), 6379),)
         }
     }
 }
