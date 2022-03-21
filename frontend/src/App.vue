@@ -16,8 +16,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
 
 #app {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 700;
+  font-weight: 2345100;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

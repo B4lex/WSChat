@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Login from '@/pages/Login'
-import ChatRoom from '@/pages/ChatRoom'
-import Profile from '@/pages/Profile'
+import Login from '@/views/Login'
+import ChatRoom from '@/views/ChatRoom'
+import Profile from '@/views/Profile'
 import { auth } from '@/services'
 
 Vue.use(Router)
@@ -35,7 +35,7 @@ const router = new Router({
   mode: 'history'
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!auth.isLoggedIn()) {
       next({

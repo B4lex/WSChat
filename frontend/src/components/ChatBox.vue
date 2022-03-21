@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
 import Message from '@/components/Message.vue'
 
 import { auth, api, ChatWebSocketMixin } from '@/services'
@@ -41,7 +40,6 @@ import { auth, api, ChatWebSocketMixin } from '@/services'
 export default {
   name: 'ChatBox',
   components: {
-    Header,
     Message
   },
   mixins: [ChatWebSocketMixin],
