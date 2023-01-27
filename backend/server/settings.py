@@ -21,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    REDIS_HOST=(str, 'localhost')
+    REDIS_HOST=(str, 'localhost'),
+    DJANGO_SECRET_KEY=(str, 'SuperSecretKey')
 )
 environ.Env.read_env((BASE_DIR / '.env').as_posix())
 
@@ -29,7 +30,7 @@ environ.Env.read_env((BASE_DIR / '.env').as_posix())
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(h-c)dk!w&f83-00zm__3gs(v$x(1gw0#4s3_x+ov@%w13li&q'
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
