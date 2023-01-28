@@ -2,20 +2,20 @@ import { StatusBar } from "expo-status-bar";
 
 import { StyleSheet, Text, View, TextInput, Button } from "react-native";
 import * as React from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { api } from "../services";
-import { API_ROOT } from "../config";
+import { auth } from "../services";
 
-export default function Login({ navigation }) {
+export default ({ navigation }) => {
   const [username, setUsername] = React.useState("");
 
+  React.useEffect(() => {
+    if (auth.isLoggedIn()) {
+      navigation.navigate("Chat");
+    }
+  }, []);
+
   const performLogin = async () => {
-    const response = await api.post(`${API_ROOT}auth/token/`, { username });
-    await Promise.all([
-      AsyncStorage.setItem("auth_token", response.data.token),
-      AsyncStorage.setItem("user_id", response.data.user_id.toString()),
-    ]);
+    await auth.authorize(username);
     navigation.navigate("Chat");
   };
 
@@ -27,11 +27,11 @@ export default function Login({ navigation }) {
         style={styles.usernameInput}
         onChangeText={setUsername}
       />
-      <Button title="Let's chat!" onPress={performLogin} />
+      <Button title="Let's chat!" disabled={!username} onPress={performLogin} />
       <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
