@@ -5,7 +5,7 @@ from . import models
 
 @admin.register(models.Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('sent', 'sender')
+    list_display = ('sent', 'sender', 'content')
 
 
 @admin.register(models.Room)
