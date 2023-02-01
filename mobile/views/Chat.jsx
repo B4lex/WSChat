@@ -19,12 +19,17 @@ export default ({ navigation }) => {
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
   const [userInfo, setUserInfo] = React.useState(null);
+  const [scrollPosition, setScrollPosition] = React.useState(0);
 
-  const chatFlowScroll = React.useRef();
+  const messagesListRef = React.useRef();
+
+  const collectScrollPositionFromEvent = (event) => {
+    setScrollPosition(event.nativeEvent.contentOffset.y);
+  };
 
   const scrollToBottom = React.useCallback(() => {
     if (messages.length) {
-      chatFlowScroll.current.scrollToIndex({
+      messagesListRef.current.scrollToIndex({
         index: messages.length - 1,
         animated: true,
       });
@@ -48,15 +53,18 @@ export default ({ navigation }) => {
     }
   };
 
-  const computeMessageTileLayout = React.useCallback((messagesList, index) => {
-    const messageContent = messagesList[index].content;
-    const tileHeight = 20 + Math.floor(messageContent.length / 30) * 16;
-    return {
-      length: tileHeight,
-      offset: tileHeight * index,
-      index,
-    };
-  });
+  const computeMessageTileLayout = (messagesList, index) => {
+    if (messagesListRef.current) {
+      const messageContent = messagesList[index].content;
+      const tileHeight =
+        45 + (Math.floor(messageContent.length / 20) || 1) * 20;
+      return {
+        length: tileHeight,
+        offset: tileHeight * index,
+        index,
+      };
+    }
+  };
 
   const handleIncomingMessage = (message) => {
     if (message.sender.id !== userInfo.id) {
@@ -86,13 +94,14 @@ export default ({ navigation }) => {
       </Text>
       <View style={styles.chatBox}>
         <FlatList
-          ref={chatFlowScroll}
+          ref={messagesListRef}
           keyboardShouldPersistTaps="handled"
           data={messages}
           getItemLayout={computeMessageTileLayout}
           renderItem={({ item, index }) => (
             <MessageTile userInfo={userInfo} message={item} key={index} />
           )}
+          onMomentumScrollEnd={collectScrollPositionFromEvent}
           style={styles.chatFlow}
         />
         <View style={styles.bottomBox}>
