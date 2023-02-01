@@ -6,6 +6,7 @@ import {
   TextInput,
   Pressable,
   KeyboardAvoidingView,
+  ScrollView,
   FlatList,
 } from "react-native";
 
@@ -19,18 +20,12 @@ export default ({ navigation }) => {
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
   const [userInfo, setUserInfo] = React.useState(null);
-  const [scrollPosition, setScrollPosition] = React.useState(0);
 
   const messagesListRef = React.useRef();
 
-  const collectScrollPositionFromEvent = (event) => {
-    setScrollPosition(event.nativeEvent.contentOffset.y);
-  };
-
   const scrollToBottom = React.useCallback(() => {
     if (messages.length) {
-      messagesListRef.current.scrollToIndex({
-        index: messages.length - 1,
+      messagesListRef.current.scrollToEnd({
         animated: true,
       });
     }
@@ -53,19 +48,6 @@ export default ({ navigation }) => {
     }
   };
 
-  const computeMessageTileLayout = (messagesList, index) => {
-    if (messagesListRef.current) {
-      const messageContent = messagesList[index].content;
-      const tileHeight =
-        45 + (Math.floor(messageContent.length / 20) || 1) * 20;
-      return {
-        length: tileHeight,
-        offset: tileHeight * index,
-        index,
-      };
-    }
-  };
-
   const handleIncomingMessage = (message) => {
     if (message.sender.id !== userInfo.id) {
       setMessages([...messages, message]);
@@ -82,8 +64,6 @@ export default ({ navigation }) => {
     })();
   }, []);
 
-  React.useEffect(scrollToBottom, [messages]);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -93,17 +73,16 @@ export default ({ navigation }) => {
         WSChat ({userInfo && userInfo.username})
       </Text>
       <View style={styles.chatBox}>
-        <FlatList
+        <ScrollView
           ref={messagesListRef}
           keyboardShouldPersistTaps="handled"
-          data={messages}
-          getItemLayout={computeMessageTileLayout}
-          renderItem={({ item, index }) => (
-            <MessageTile userInfo={userInfo} message={item} key={index} />
-          )}
-          onMomentumScrollEnd={collectScrollPositionFromEvent}
           style={styles.chatFlow}
-        />
+          onContentSizeChange={scrollToBottom}
+        >
+          {messages.map((message, idx) => (
+            <MessageTile userInfo={userInfo} message={message} key={idx} />
+          ))}
+        </ScrollView>
         <View style={styles.bottomBox}>
           <TextInput
             style={styles.chatInput}
