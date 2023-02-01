@@ -9,9 +9,9 @@ export default ({ navigation }) => {
   const [username, setUsername] = React.useState("");
 
   React.useEffect(() => {
-    if (auth.isLoggedIn()) {
-      navigation.navigate("Chat");
-    }
+    auth.isLoggedIn().then(
+      isLoggedIn => isLoggedIn && navigation.navigate("Chat")
+    )
   }, []);
 
   const performLogin = async () => {
